@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     )
 
     const answer = result.response.text()
-    const sources = [...new Set(scored.map(c => c.source))]
+    const sources = Array.from(new Set(scored.map(c => c.source)))
     const found = scored.length > 0
 
     return NextResponse.json({ answer, sources, found })
