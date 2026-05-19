@@ -1,0 +1,37 @@
+name: Processar PDFs com Docling
+
+on:
+  push:
+    paths:
+      - 'Procedimentos/**'
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache das dependências pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-docling-v1
+          restore-keys: |
+            ${{ runner.os }}-pip-docling-
+
+      - name: Instalar dependências
+        run: pip install -r scripts/requirements.txt
+
+      - name: Extrair conhecimento dos PDFs
+        env:
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: python scripts/extract_knowledge.py
