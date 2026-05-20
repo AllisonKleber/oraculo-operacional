@@ -31,7 +31,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Pergunta vazia.' }, { status: 400 })
     }
 
-    const chunks = await redis.get<Chunk[]>('oraculo:knowledge_chunks') ?? []
+    const raw = await redis.get('oraculo:knowledge_chunks')
+    const chunks: Chunk[] = Array.isArray(raw) ? raw : (typeof raw === 'string' ? JSON.parse(raw) : [])
 
     if (chunks.length === 0) {
       return NextResponse.json({
