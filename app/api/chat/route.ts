@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       : chunks.slice(0, 3).map(c => `### ${c.section}\n${c.content}`).join('\n\n---\n\n')
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash-8b',
+      model: 'gemini-2.0-flash',
       systemInstruction: 'Você é o Oráculo Normativo da Neoenergia Cosern. Responda perguntas técnicas sobre normas e procedimentos com base APENAS no contexto fornecido. Seja objetivo e preciso. Cite a seção da norma quando relevante. Responda sempre em português. Se a resposta não estiver no contexto, diga que não encontrou a informação na base atual.',
     })
 
